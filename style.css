@@ -10,7 +10,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 h1 {
@@ -24,7 +24,7 @@ h1 {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
@@ -42,6 +42,7 @@ h1 {
     background-color: #fff;
     text-align: left;
     max-width: 200px;
+    margin: 10px;
 }
 
 /* Modal styles */
@@ -59,6 +60,7 @@ h1 {
     position: relative;
     background-color: #fff;
     margin: 20px auto;
+    margin-top: 200px;
     padding: 20px;
     width: 80%;
     max-width: 400px;
@@ -97,12 +99,14 @@ input[type="checkbox"] {
 #add-book-btn {
     background-color: #007BFF;
     color: #fff;
-    padding: 10px 15px;
+    padding: 15px 20px;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    margin-bottom: 30px;
 }
   
 #add-book-btn:hover {
@@ -110,10 +114,29 @@ background-color: #0056b3;
 box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
 }
 
+.delete-book {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
 /*Toggle*/
+#read {
+    display: none;
+}
+
 .read-toggle {
     display: flex;
     align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
 }
   
 .toggle-read {

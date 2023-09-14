@@ -9,6 +9,17 @@ function Book(title, author, pages, read) {
 // Initialize an array to store books
 let myLibrary = [];
 
+// Toggle read status modal
+const toggleLabel = document.querySelector('.toggle-label');
+const toggleInput = document.querySelector('.toggle-input');
+
+toggleLabel.addEventListener('click', () => {
+    toggleLabel.classList.toggle('checked');
+    toggleInput.checked = !toggleInput.checked;
+}
+);
+
+
 // Remove padding when there are no books
 function render() {
     const bookList = document.querySelector('.book-list');
@@ -23,39 +34,30 @@ function render() {
     myLibrary.forEach(book => renderBook(book));
 }
 
+
+
 // Function to add a new book
 function addBookToLibrary() {
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     const pages = document.getElementById('pages').value;
     const read = document.getElementById('read').checked;
-
+  
     const newBook = new Book(title, author, pages, read);
     myLibrary.push(newBook);
-
-    // Toggle read status
-    const toggleRead = document.getElementById('read');
-    const toggleLabel = document.querySelector('.toggle-label');
-
-    toggleRead.style.display = 'none';
-    toggleLabel.addEventListener('click', () => {
-    toggleRead.checked = !toggleRead.checked;
-    newBook.read = toggleRead.checked;
-    toggleLabel.classList.toggle('checked');
-  });
-    
+  
     // Clear form fields
     document.getElementById('title').value = '';
     document.getElementById('author').value = '';
     document.getElementById('pages').value = '';
     document.getElementById('read').checked = false;
-
+  
     // Close the modal
     closeModal();
-
+  
     // Update the book list
     displayBooks();
-}
+  }
 
 // Function to display books
 function displayBooks() {
@@ -69,10 +71,17 @@ function displayBooks() {
             <h3>${book.title}</h3>
             <p>Author: ${book.author}</p>
             <p>Pages: ${book.pages}</p>
-            <p>${book.read ? 'Read' : 'Not Read'}</p>
+            <p>Status: ${book.read ? 'Read' : 'Not Read'}</p>
             <button onclick="toggleReadStatus(${index})">Toggle Read Status</button>
+            <button class="delete-book">Delete</button>
         `;
         bookList.appendChild(bookCard);
+
+        const deleteButton = bookCard.querySelector('.delete-book');
+        deleteButton.addEventListener('click', () => {
+            deleteBook(book);
+            bookCard.remove();
+        });
     });
 }
 
@@ -86,7 +95,7 @@ function toggleReadStatus(index) {
 function deleteBook(book) {
     const bookIndex = myLibrary.indexOf(book);
     myLibrary.splice(bookIndex, 1);
-  }
+}
 
 // Open the modal
 document.getElementById('add-book-btn').addEventListener('click', () => {
