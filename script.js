@@ -9,11 +9,12 @@ function Book(title, author, pages, read) {
 // Initialize an array to store books
 let myLibrary = [];
 
+
 // Toggle read status modal
 const toggleLabel = document.querySelector('.toggle-label');
-const toggleInput = document.querySelector('.toggle-input');
 
 toggleLabel.addEventListener('click', () => {
+const toggleInput = document.querySelector('.toggle-input');
     toggleLabel.classList.toggle('checked');
     toggleInput.checked = !toggleInput.checked;
 }
@@ -42,6 +43,8 @@ function addBookToLibrary() {
     const author = document.getElementById('author').value;
     const pages = document.getElementById('pages').value;
     const read = document.getElementById('read').checked;
+    const toggleLabel = document.querySelector('.toggle-label');
+    const toggleInput = document.querySelector('.toggle-input');    
   
     const newBook = new Book(title, author, pages, read);
     myLibrary.push(newBook);
@@ -51,6 +54,7 @@ function addBookToLibrary() {
     document.getElementById('author').value = '';
     document.getElementById('pages').value = '';
     document.getElementById('read').checked = false;
+    toggleLabel.classList.remove('checked');
   
     // Close the modal
     closeModal();
