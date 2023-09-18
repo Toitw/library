@@ -1,121 +1,111 @@
-// Define book constructor
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-}
-
-// Initialize an array to store books
-let myLibrary = [];
-
-
-// Toggle read status modal
-const toggleLabel = document.querySelector('.toggle-label');
-
-toggleLabel.addEventListener('click', () => {
-const toggleInput = document.querySelector('.toggle-input');
-    toggleLabel.classList.toggle('checked');
-    toggleInput.checked = !toggleInput.checked;
-}
-);
-
-
-// Remove padding when there are no books
-function render() {
-    const bookList = document.querySelector('.book-list');
-    bookList.innerHTML = '';
+class Book {
+    constructor(title, author, pages, read) {
+      this.title = title;
+      this.author = author;
+      this.pages = pages;
+      this.read = read;
+    }
+  }
   
-    if (myLibrary.length === 0) {
-      bookList.classList.remove('has-books');
-      return;
+  class Library {
+    constructor() {
+      this.books = [];
     }
   
-    bookList.classList.add('has-books');
-    myLibrary.forEach(book => renderBook(book));
-}
+    addBook(book) {
+      this.books.push(book);
+    }
+  
+    removeBook(book) {
+      const index = this.books.indexOf(book);
+      if (index !== -1) {
+        this.books.splice(index, 1);
+      }
+    }
+  
+    toggleReadStatus(book) {
+      book.read = !book.read;
+    }
+  
+    render() {
+      const bookList = document.querySelector('.book-list');
+      bookList.innerHTML = '';
+  
+      if (this.books.length === 0) {
+        bookList.classList.remove('has-books');
+        return;
+      }
+  
+      bookList.classList.add('has-books');
+      this.books.forEach((book) => {
+        const bookCard = document.createElement('div');
+        bookCard.classList.add('book-card');
+        bookCard.innerHTML = `
+          <h3>${book.title}</h3>
+          <p>Author: ${book.author}</p>
+          <p>Pages: ${book.pages}</p>
+          <p>Status: ${book.read ? 'Read' : 'Not Read'}</p>
+          <button class="toggle-read-status">Toggle Read Status</button>
+          <button class="delete-book">Delete</button>
+        `;
+        bookList.appendChild(bookCard);
+  
+        const toggleReadStatusButton = bookCard.querySelector('.toggle-read-status');
+        toggleReadStatusButton.addEventListener('click', () => {
+          this.toggleReadStatus(book);
+          this.render();
+        });
+  
+        const deleteButton = bookCard.querySelector('.delete-book');
+        deleteButton.addEventListener('click', () => {
+          this.removeBook(book);
+          bookCard.remove();
+            this.render();
+        });
+      });
+    }
+  }
+  
+  const library = new Library();
+  
+  // Open the modal
+  document.getElementById('add-book-btn').addEventListener('click', () => {
+    document.getElementById('add-modal').style.display = 'block';
+  });
+  
+  // Close the modal
+  function closeModal() {
+    document.getElementById('add-modal').style.display = 'none';
+  }
 
-
-
-// Function to add a new book
-function addBookToLibrary() {
+  //Read toggle in the modal
+  document.querySelector('.toggle-label').addEventListener('click', () => {
+    document.querySelector('.toggle-label').classList.toggle('checked');
+  });
+  
+  // Event listener for adding a new book
+  document.getElementById('add-form').addEventListener('submit', (e) => {
+    e.preventDefault();
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     const pages = document.getElementById('pages').value;
     const read = document.getElementById('read').checked;
-    const toggleLabel = document.querySelector('.toggle-label');
-    const toggleInput = document.querySelector('.toggle-input');    
-  
     const newBook = new Book(title, author, pages, read);
-    myLibrary.push(newBook);
+    library.addBook(newBook);
   
     // Clear form fields
     document.getElementById('title').value = '';
     document.getElementById('author').value = '';
     document.getElementById('pages').value = '';
     document.getElementById('read').checked = false;
-    toggleLabel.classList.remove('checked');
+    document.querySelector('.toggle-label').classList.remove('checked');
   
     // Close the modal
     closeModal();
   
     // Update the book list
-    displayBooks();
-  }
-
-// Function to display books
-function displayBooks() {
-    const bookList = document.querySelector('.book-list');
-    bookList.innerHTML = '';
-
-    myLibrary.forEach((book, index) => {
-        const bookCard = document.createElement('div');
-        bookCard.classList.add('book-card');
-        bookCard.innerHTML = `
-            <h3>${book.title}</h3>
-            <p>Author: ${book.author}</p>
-            <p>Pages: ${book.pages}</p>
-            <p>Status: ${book.read ? 'Read' : 'Not Read'}</p>
-            <button onclick="toggleReadStatus(${index})">Toggle Read Status</button>
-            <button class="delete-book">Delete</button>
-        `;
-        bookList.appendChild(bookCard);
-
-        const deleteButton = bookCard.querySelector('.delete-book');
-        deleteButton.addEventListener('click', () => {
-            deleteBook(book);
-            bookCard.remove();
-        });
-    });
-}
-
-// Function to toggle read status
-function toggleReadStatus(index) {
-    myLibrary[index].read = !myLibrary[index].read;
-    displayBooks();
-}
-
-// Function to delete a book
-function deleteBook(book) {
-    const bookIndex = myLibrary.indexOf(book);
-    myLibrary.splice(bookIndex, 1);
-}
-
-// Open the modal
-document.getElementById('add-book-btn').addEventListener('click', () => {
-    document.getElementById('add-modal').style.display = 'block';
+    library.render();
 });
-
-// Close the modal
-function closeModal() {
-    document.getElementById('add-modal').style.display = 'none';
-}
-
-// Event listener for adding a new book
-document.getElementById('add-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    addBookToLibrary();
-});
-
-// Initial display of books
-displayBooks();
+  
+  // Initial display of books
+  library.render();
